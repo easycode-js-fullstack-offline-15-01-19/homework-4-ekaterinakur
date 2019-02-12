@@ -10,13 +10,18 @@
  * @returns {number} Произведение чисел       
  */
 function multiply() {
-    let mult = 1;
+  if (!arguments.length) { return 0; }
   
-    for (let i = 0; i < arguments.length; i++) mult *= arguments[i];
-    if (arguments.length == 0) return 0;
+  let mult = 1;
   
-    return mult;
-  };
+  for (let i = 0; i < arguments.length; i++) {
+    if (typeof arguments[i] === 'number') {
+      mult *= arguments[i];
+    }
+  }
+  
+  return mult;
+  }
   
   multiply(1, 5, 3);
   
@@ -37,7 +42,7 @@ function multiply() {
     }
   
     return str2;
-  };
+  }
   
   reverseString('hghgj');
   
@@ -58,7 +63,7 @@ function multiply() {
     }
   
     return str2.trim();
-  };
+  }
   
   getCodeStringFromText('hhnnkk');
   
@@ -77,7 +82,7 @@ function multiply() {
     let num = Math.ceil(Math.random() * 10);
   
     return num === myNum ? console.log('Вы выиграли') : console.log('Вы не угадали. Ваше число ' + myNum + ', а выпало число ' + num);
-  };
+  }
   
   guessNum(5);
   
@@ -91,14 +96,14 @@ function multiply() {
    * @returns {object} Массив последовательных чисел длиной n
    */
   function getArray(n) {
-    let arr = [];
+    let newArr = [];
       
     for (let i = 1; i <= n; i++) {
-      arr.push(i);
+      newArr.push(i);
     }
     
-    return arr;
-  };
+    return newArr;
+  }
   
   getArray(4);
   
@@ -113,7 +118,7 @@ function multiply() {
    */
   function doubleArray(arr) {
     return arr.concat(arr);
-  };
+  }
   
   doubleArray([1, 15, 34]);
   
@@ -127,15 +132,15 @@ function multiply() {
    * @returns {object} Массив с входящими массивами без певых эл-тов
    */
   function getArray() {
-    let arr = [];
+    let newArr = [];
   
     for (let i = 0; i < arguments.length; i++) {
-      arr[i] = arguments[i];
-      arr[i].shift();
+      arguments[i].shift(); 
+      newArr.push(arguments[i]);
     }
   
-    return arr;
-  };
+    return newArr;
+  }
   
   getArray([1, 15, 20], ['k', 5, 8], [5, 'pop']);
   
@@ -164,56 +169,41 @@ function multiply() {
     for (let i = 0; i < arr.length; i++) {
       if (key in arr[i] && arr[i][key] === value) {
         newArr.push(arr[i]);
-      };
-    };
+      }
+    }
+    
     return newArr;
-  };
+  }
   
   funcGetUsers(users, 'gender', 'male');
   
   
   //  9. Функции высшего порядка. Задача 1.
   
-  let arr1 = ['my', 'name', 'is', 'Trinity'];
-  let arr2 = [10, 20, 30];
-  let arr3 = [{age: 45, name: 'Jhon'}, {age: 20, name: 'Aaron'}];
-  let arr4 = ['abc', '123'];
+  function mainFunc(arr, callback) {
+    if (!Array.isArray(arr)) return console.log('Error');
   
-  /**
-   * @autor Ekaterina Kurochka
-   * @description Для создания строки с сообщением с результатами обработки данных коллбеком
-   * @param {arr} Массив
-   * @param {callback} Коллбек для обработки массива
-   * @returns {string} Строку-сообщение с результатами обработки
-   */
-  function newValue(arr, callback) {
-    return 'New value: ' + callback(arr);
-  };
+    let res = 'New value: ';
   
-  /**
-   * @autor Ekaterina Kurochka
-   * @description callback - Для обработки каждого элемента массива (разные задачи обработки, много текста)
-   * @param {arr} Массив (зависит от задачи обработки)
-   * @returns {object} Результат обработки
-   */
-
-  function callback1(arr) {
-    return arr.map(item => item.replace(item[0], item[0].toUpperCase())).join('');
-  };  
+    for (let i = 0; i < arr.length; i++){
+        res += callback(arr[i]);
+    }
   
-  function callback2(arr) {
-    return arr.map(item => item * 10).join(', ');
-  };
+    return res;
+  }
   
-  function callback3(arr) {
-    return arr.map(item => item.name + ' is ' + item.age).join(', ');
-  };
+  let mainRes1 = mainFunc(['my', 'name', 'is', 'Trinity'], function (item) {
+    return item[0].toUpperCase() + item.slice(1);
+  });
   
-  function callback4(arr) {
-    return arr.map(item => item.split('').reverse().join('')).join(', ');
-  };
+  let mainRes2 = mainFunc([10, 20, 30], function (item) {
+    return item * 10 + ' ';
+  });
   
-  newValue(arr1, callback1);
-  newValue(arr2, callback2);
-  newValue(arr3, callback3);
-  newValue(arr4, callback4);
+  let mainRes3 = mainFunc([{age: 45, name: 'Jhon'}, {age: 20, name: 'Aaron'}], function (item) {
+    return item.name + ' is ' + item.age + ', ';
+  });
+  
+  let mainRes4 = mainFunc(['abc', '123'], function (item) {
+    return item.split('').reverse().join('') + ', ';
+  });
